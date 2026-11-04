@@ -1,0 +1,15 @@
+# GORMPO Training Configuration for Walker2d-Medium-Expert-Sparse with KDE
+# This config is used with mopo.py to train GORMPO using a pre-trained KDE density model
+
+task: walker2d-medium-expert-v2
+algo-name: gormpo
+reward-penalty-coef: 0.5
+seed: 1
+data_path: data/sparse_datasets/walker2d_medium_expert_sparse_73.pkl
+epoch: 3000
+rollout-length: 5
+penalty_type: tanh
+classifier_model_name: checkpoints/walker2d_medium_expert_sparse/kde_42/kde_42
+density_model: kde
+dynamics-model-dir: auto
+target_dim: 23  # 17 (obs) + 6 (action) for Walker2d

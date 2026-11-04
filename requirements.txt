@@ -1,0 +1,46 @@
+# Requirements for GORMPO: Generative OOD-regularized Model-based Policy Optimization
+# Covers both mbpo_based/ and mobile_based/ (Python 3.8).
+# See README.md for further details and caveats
+
+--extra-index-url https://download.pytorch.org/whl/cu118
+
+# Deep Learning Framework
+torch==2.4.1+cu118
+torchdiffeq==0.2.5
+tensorboard==2.14.0
+
+# RL Environment and Datasets
+gym==0.23.1
+gymnasium==1.0.0
+shimmy==2.0.0
+git+https://github.com/Farama-Foundation/d4rl@master#egg=d4rl  # D4RL offline RL datasets (includes mjrl)
+mujoco==3.2.3
+mujoco-py==2.1.2.14
+pyyaml==6.0.3
+
+# Scientific Computing
+numpy==1.24.4
+scipy==1.10.1
+pandas==2.0.3
+
+# Machine Learning
+scikit-learn==1.3.2
+faiss-gpu-cu11==1.8.0.2
+joblib==1.4.2
+
+# Density Estimation / Generative Models
+diffusers==0.35.2
+
+# Visualization
+matplotlib==3.7.5
+seaborn==0.13.2
+
+# Progress Bar
+tqdm==4.67.1
+
+# Experiment Tracking
+wandb==0.19.8
+
+# Hyperparameter Tuning
+ray==2.10.0
+pyarrow==17.0.0

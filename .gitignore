@@ -1,0 +1,19 @@
+wandb/
+*/__pycache__/
+gormpo/
+log
+logs/
+*.pyc
+*.pyo
+*.pyd
+.claude
+*results
+CLAUDE.md
+figures
+CLAUDE.md
+
+# downloaded from Hugging Face (python scripts/download_assets.py)
+/data/
+/checkpoints/
+# training outputs
+/saved_models/

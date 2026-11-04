@@ -1,0 +1,54 @@
+#!/bin/bash
+cd "$(dirname "$0")/.."  # run from mbpo_based/
+# Multi-seed GORMPO-KDE training for HalfCheetah-Medium-Expert-v2 (Sparse 72.5%)
+# Usage: bash mbpo_based/bash_scr/gormpo_kde_halfcheetah_medium_expert_sparse.sh
+
+echo "============================================"
+echo "Multi-Seed GORMPO-KDE Training: HalfCheetah-Medium-Expert-Sparse3"
+echo "============================================"
+echo ""
+
+# Array of random seeds to test
+seeds=(42 123 456)
+
+# Shared results file for all seeds
+RESULTS_FILE="results/halfcheetah-medium-expert-v2_sparse_72.5/kde/gormpo_kde_multiseed_results.csv"
+
+# Loop through each seed
+for seed in "${seeds[@]}"; do
+    echo "=========================================="
+    echo ">>> Training with seed = $seed"
+    echo "=========================================="
+
+    # Step 1: Train KDE density estimator for this seed
+    # echo "Step 1/2: Training KDE density estimator (seed $seed)..."
+    # python ../density_models/kde_module/kde.py \
+    #     --config ../configs/kde/halfcheetah_medium_expert_sparse.yaml \
+    #     --seed $seed \
+    #     --save_path checkpoints/halfcheetah_medium_expert_sparse/kde_$seed/kde_$seed \
+    #     --devid 0
+    # echo "✓ KDE training complete for seed $seed"
+    # echo ""
+
+    # Step 2: Train GORMPO policy using the trained KDE model
+    echo "Step 2/2: Training GORMPO-KDE policy (seed $seed)..."
+    python mopo.py \
+        --config configs/kde/gormpo_halfcheetah_medium_expert_sparse.yaml \
+        --seed $seed \
+        --classifier_model_name checkpoints/halfcheetah_medium_expert_sparse/kde_$seed/kde_$seed \
+        --epoch 3000 \
+        --devid 7 \
+        --dynamics-model-dir auto\
+        --results_output $RESULTS_FILE
+    echo "✓ GORMPO-KDE training complete for seed $seed"
+    echo ""
+done
+
+echo "============================================"
+echo "All GORMPO-KDE multi-seed experiments completed!"
+echo "============================================"
+echo ""
+
+# Compute normalized scores across all seeds
+echo "Computing normalized scores..."
+python ../helpers/normalizer.py $RESULTS_FILE halfcheetah-medium-expert-v2

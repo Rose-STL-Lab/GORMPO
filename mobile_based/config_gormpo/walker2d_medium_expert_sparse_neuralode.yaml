@@ -1,0 +1,11 @@
+task: walker2d-medium-expert-v2
+penalty_coef: 1.5
+reward_penalty_coef: 0.3
+seed: 1
+dataset-path: data/sparse_datasets/walker2d_medium_expert_sparse_73.pkl
+epoch: 3000
+penalty_type: tanh
+classifier_model_name: checkpoints/walker2d_medium_expert_sparse/neuralODE
+density_model: neuralODE
+target_dim: 23  # 17 (obs) + 6 (action) for Walker2d
+dynamics_path: auto

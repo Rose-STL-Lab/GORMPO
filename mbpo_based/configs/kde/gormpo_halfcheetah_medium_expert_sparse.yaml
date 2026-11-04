@@ -1,0 +1,14 @@
+# GORMPO Training Configuration for HalfCheetah-Medium-Expert-Sparse with KDE
+# This config is used with mopo.py to train GORMPO using a pre-trained KDE density model
+
+task: halfcheetah-medium-expert-v2
+algo-name: gormpo
+reward-penalty-coef: 0.1
+seed: 1
+data_path: data/sparse_datasets/halfcheetah_medium_expert_sparse_72.5.pkl
+epoch: 1
+rollout-length: 5
+penalty_type: tanh
+classifier_model_name: checkpoints/halfcheetah_medium_expert_sparse/kde_42/kde_42
+density_model: kde
+target_dim: 23  # 17 (obs) + 6 (action) for HalfCheetah

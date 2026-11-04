@@ -1,0 +1,11 @@
+classifier_model_name: checkpoints/hopper_medium_expert_sparse/diffusion_42/checkpoint.pt
+density_model: diffusion
+
+task: hopper-medium-expert-v2
+data_path: data/sparse_datasets/hopper_medium_expert_sparse_78.pkl
+
+reward-penalty-coef: 0.05
+seed: 1
+epoch: 1000
+penalty_type: 'tanh'
+rollout-length: 5

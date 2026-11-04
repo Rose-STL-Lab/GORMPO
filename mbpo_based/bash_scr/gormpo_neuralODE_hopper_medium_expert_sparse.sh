@@ -1,0 +1,58 @@
+#!/bin/bash
+cd "$(dirname "$0")/.."  # run from mbpo_based/
+# Multi-seed GORMPO-NeuralODE training for Hopper-Medium-Expert-v2 (Sparse 78%)
+# Usage: bash mbpo_based/bash_scr/gormpo_neuralODE_hopper_medium_expert_sparse.sh
+
+source venv/bin/activate
+
+set -e  # Exit on error
+
+echo "============================================"
+echo "Multi-Seed GORMPO-NeuralODE Training: Hopper-Medium-Expert-Sparse3"
+echo "============================================"
+echo ""
+
+# Array of random seeds to test
+seeds=(42 123 456)
+
+# Shared results file for all seeds
+RESULTS_FILE="results/hopper-medium-expert-v2_sparse_78/neuralODE/gormpo_neuralODE_multiseed_results.csv"
+
+# Loop through each seed
+for seed in "${seeds[@]}"; do
+    echo "=========================================="
+    echo ">>> Training with seed = $seed"
+    echo "=========================================="
+
+    # Step 1: Train Neural ODE density model for this seed
+    # echo "Step 1/2: Training Neural ODE density model (seed $seed)..."
+    # python ../density_models/neuralODE/neural_ode_density.py \
+    #     --config ../configs/neuralODE/hopper_medium_expert_sparse.yaml \
+    #     --seed $seed \
+    #     --epochs 10 \
+    #     --out checkpoints/hopper_medium_expert_sparse/neuralODE
+    # echo "✓ Neural ODE training complete for seed $seed"
+    # echo ""
+
+    # Step 2: Train GORMPO policy using the trained Neural ODE model
+    echo "Step 2/2: Training GORMPO-NeuralODE policy (seed $seed)..."
+    python mopo.py \
+        --config configs/neuralODE/gormpo_hopper_medium_expert_sparse.yaml \
+        --seed $seed \
+        --epoch 3000 \
+        --rollout-length 5 \
+        --dynamics-model-dir auto \
+        --devid 5 \
+        --results_output $RESULTS_FILE
+    echo "✓ GORMPO-NeuralODE training complete for seed $seed"
+    echo ""
+done
+
+echo "============================================"
+echo "All GORMPO-NeuralODE multi-seed experiments completed!"
+echo "============================================"
+echo ""
+
+# Compute normalized scores across all seeds
+echo "Computing normalized scores..."
+python ../helpers/normalizer.py $RESULTS_FILE hopper-medium-expert-v2

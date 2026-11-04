@@ -1,0 +1,11 @@
+task: hopper-medium-expert-v2
+penalty_coef: 1.5
+reward_penalty_coef: 0.3
+seed: 1
+dataset-path: data/sparse_datasets/hopper_medium_expert_sparse_78.pkl
+epoch: 3000
+penalty_type: tanh_shuffled
+classifier_model_name: checkpoints/hopper_medium_expert_sparse/neuralODE
+density_model: neuralODE
+target_dim: 14  # 11 (obs) + 3 (action) for Hopper
+dynamics_path: auto

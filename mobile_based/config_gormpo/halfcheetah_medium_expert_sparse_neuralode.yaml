@@ -1,0 +1,11 @@
+task: halfcheetah-medium-expert-v2
+penalty_coef: 1.0
+reward_penalty_coef: 0.1
+seed: 1
+dataset-path: data/sparse_datasets/halfcheetah_medium_expert_sparse_72.5.pkl
+epoch: 3000
+penalty_type: tanh
+classifier_model_name: checkpoints/halfcheetah_medium_expert_sparse/neuralODE
+density_model: neuralODE
+target_dim: 23  # 17 (obs) + 6 (action) for HalfCheetah
+dynamics_path: auto
