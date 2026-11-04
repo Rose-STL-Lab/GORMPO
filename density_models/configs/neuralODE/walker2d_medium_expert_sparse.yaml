@@ -1,0 +1,38 @@
+# Neural ODE Training Configuration
+# Configuration for training a Continuous Normalizing Flow on Walker2d-Medium-Expert (Sparse 73%) dataset
+
+# Dataset configuration
+npz: data/diffusion_processed/walker2d_medium_expert_sparse_73_train.npz
+out: checkpoints/walker2d_medium_expert_sparse/neuralODE
+model: checkpoints/walker2d_medium_expert_sparse/neuralODE/model.pt  # used by neural_ode_inference.py
+
+# Training parameters
+epochs: 10
+batch: 512
+lr: 0.001
+wd: 0.0
+
+# Model architecture
+hidden_dims: [512, 512]
+activation: silu
+time_dependent: true
+
+# ODE solver configuration
+solver: dopri5
+t0: 0.0
+t1: 1.0
+rtol: 1.0e-5
+atol: 1.0e-5
+
+# Hardware
+device: cuda
+
+# Logging and checkpointing
+log_every: 100
+checkpoint_every: 50
+
+# Random seed
+seed: 42
+
+# Usage:
+# python density_models/neuralODE/neural_ode_density.py --config density_models/configs/neuralODE/walker2d_medium_expert_sparse.yaml

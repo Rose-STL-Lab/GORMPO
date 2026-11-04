@@ -10,6 +10,7 @@ with the same layout as the Hugging Face repos:
 
     data/sparse_datasets/<env>_medium_expert_sparse_<p>.pkl
     data/ood_test/<env>-medium-expert-v2/ood-distance-<d>-uniform.pkl
+    data/diffusion_processed/<env>_medium_expert_sparse_<p>_{train,val,test}.npz   Diffusion/NeuralODE training data
     checkpoints/<env>_medium_expert_sparse/<model>_<seed>/...           density models
     checkpoints/<env>_medium_expert_sparse/neuralODE/...                NeuralODE density model
     checkpoints/<env>_medium_expert_sparse/mbpo_based/<model>/seed_*/   MBPO-based GORMPO runs
@@ -24,7 +25,7 @@ from common.paths import CKPT_DIR, DATA_DIR, HF_DATA_REPO, HF_MODEL_REPO  # noqa
 
 ENVS = ["halfcheetah", "hopper", "walker2d"]
 MODELS = ["kde", "vae", "realnvp", "diffusion", "neuralODE"]
-WHAT = ["data", "ood", "density", "mbpo", "mobile"]
+WHAT = ["data", "ood", "npz", "density", "mbpo", "mobile"]
 
 
 def main():
@@ -33,7 +34,7 @@ def main():
     p.add_argument("--models", nargs="+", default=MODELS, choices=MODELS, help="density models")
     p.add_argument("--what", nargs="+", default=WHAT, choices=WHAT,
                    help="data: sparse datasets, ood: OOD test sets, density: density models, "
-                        "mbpo/mobile: trained GORMPO runs (policy + transition model)")
+                        "npz: Diffusion/NeuralODE training splits, mbpo/mobile: trained GORMPO runs (policy + transition model)")
     p.add_argument("--intermediate", action="store_true",
                    help="also download intermediate training checkpoints (diffusion checkpoints/, NeuralODE checkpoint_epoch_*)")
     p.add_argument("--revision", default=None, help="git revision of both HF repos (default: main)")
@@ -41,12 +42,14 @@ def main():
 
     from huggingface_hub import snapshot_download
 
-    if "data" in args.what or "ood" in args.what:
+    if {"data", "ood", "npz"} & set(args.what):
         pats = []
         if "data" in args.what:
             pats += [f"sparse_datasets/{e}_medium_expert_sparse_*.pkl" for e in args.envs]
         if "ood" in args.what:
             pats += [f"ood_test/{e}-medium-expert-v2/*" for e in args.envs]
+        if "npz" in args.what:  # train/val/test splits for Diffusion and NeuralODE training
+            pats += [f"diffusion_processed/{e}_medium_expert_sparse_*.npz" for e in args.envs]
         print(f"Downloading {HF_DATA_REPO} -> {DATA_DIR}")
         snapshot_download(HF_DATA_REPO, repo_type="dataset", local_dir=DATA_DIR, allow_patterns=pats, revision=args.revision)
 

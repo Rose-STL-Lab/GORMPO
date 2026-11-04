@@ -70,11 +70,11 @@ You can also use the `monte_carlo_sampling_unconditional.py` script with config 
 ```bash
 # Example using HalfCheetah config
 python density_models/diffusion/monte_carlo_sampling_unconditional.py \
-    --config density_models/diffusion/configs/test/halfcheetah_mlp_ddpm_unconditional.yaml
+    --config density_models/configs/diffusion/halfcheetah_medium_expert_sparse.yaml
 
 # Example using Hopper config
 python density_models/diffusion/monte_carlo_sampling_unconditional.py \
-    --config density_models/diffusion/configs/test/hopper_mlp_ddpm_unconditional.yaml
+    --config density_models/configs/diffusion/hopper_medium_expert_sparse.yaml
 ```
 
 Config files specify:
@@ -575,7 +575,7 @@ The `monte_carlo_sampling_unconditional.py` script provides a complete pipeline 
 ```bash
 # Run with config file
 python density_models/diffusion/monte_carlo_sampling_unconditional.py \
-    --config density_models/diffusion/configs/test/halfcheetah_mlp_ddpm_unconditional.yaml
+    --config density_models/configs/diffusion/halfcheetah_medium_expert_sparse.yaml
 
 # Or specify parameters directly
 python density_models/diffusion/monte_carlo_sampling_unconditional.py \
@@ -767,7 +767,7 @@ ood_data = np.load('different_environment.npz')['action']
 
 ## Configuration Files
 
-Example configs are available in `density_models/diffusion/configs/test/`:
+Example configs are available in `density_models/configs/diffusion/`:
 
 **DDPM (stochastic sampling):**
 - `halfcheetah_mlp_ddpm_unconditional.yaml`
@@ -798,11 +798,11 @@ max_test_samples: 1000                  # Max test samples for NLL eval
 ```bash
 # Compute ELBO NLL on test data
 python density_models/diffusion/monte_carlo_sampling_unconditional.py \
-    --config density_models/diffusion/configs/test/halfcheetah_mlp_ddpm_unconditional.yaml
+    --config density_models/configs/diffusion/halfcheetah_medium_expert_sparse.yaml
 
 # Override specific parameters
 python density_models/diffusion/monte_carlo_sampling_unconditional.py \
-    --config density_models/diffusion/configs/test/hopper_mlp_ddpm_unconditional.yaml \
+    --config density_models/configs/diffusion/hopper_medium_expert_sparse.yaml \
     --batch-size 2000 \
     --max-test-samples 500
 ```

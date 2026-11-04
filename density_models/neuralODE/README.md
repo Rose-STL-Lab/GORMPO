@@ -10,7 +10,7 @@
 ## YAML Config Example
 
 ```yaml
-# density_models/neuralODE/configs/hopper_mlp.yaml
+# density_models/configs/neuralODE/hopper_medium_expert_sparse.yaml
 npz: /public/d4rl/neuralODE_processed/hopper-medium-v2_train.npz
 out: /data/sparse_d4rl/pretrained/neural_ode/hopper_medium_v2
 
@@ -34,7 +34,7 @@ device: cuda
 
 ```bash
 python density_models/neuralODE/neural_ode_density.py \
-  --config density_models/neuralODE/configs/hopper_mlp.yaml
+  --config density_models/configs/neuralODE/hopper_medium_expert_sparse.yaml
 ```
 
 Key CLI flags (overridable even when using YAML):
@@ -55,7 +55,7 @@ Key CLI flags (overridable even when using YAML):
 Compute evaluation-set NLLs (optionally saving metrics/per-sample logp):
 
 ```bash
-python density_models/neuralODE/neural_ode_inference.py --config density_models/neuralODE/configs/test/hopper.yaml
+python density_models/neuralODE/neural_ode_inference.py --config density_models/configs/neuralODE/hopper_medium_expert_sparse.yaml
 ```
 
 You can reuse the same YAML file that was used for training—the evaluator will pull matching keys (hidden dims, solver, tolerances, device, etc.). Just point `--model` to the saved weights and override `--npz` if you evaluate a different split.

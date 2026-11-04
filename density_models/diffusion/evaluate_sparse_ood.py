@@ -101,7 +101,7 @@ TRAINING_CONFIG_MAP = {
     },
 }
 
-# Neural ODE configs (same three models; model_dir from density_models/neuralODE/configs out)
+# Neural ODE configs (same three models; model_dir from density_models/configs/neuralODE out)
 NEURALODE_CONFIG_MAP = {
     "halfcheetah_sparse_72.5": {
         "yaml": "halfcheetah_medium_expert_sparse.yaml",
@@ -125,7 +125,7 @@ NEURALODE_CONFIG_MAP = {
 
 
 def load_models_from_training_configs(config_dir: str) -> Dict[str, Dict]:
-    """Load model config from unconditional_training YAMLs (out -> model_dir, npz -> train_data)."""
+    """Load model config from Diffusion training YAMLs (out -> model_dir, npz -> train_data)."""
     try:
         import yaml
     except ImportError:
@@ -154,7 +154,7 @@ def load_models_from_training_configs(config_dir: str) -> Dict[str, Dict]:
 
 
 def load_models_from_neuralode_configs(config_dir: str) -> Dict[str, Dict]:
-    """Load Neural ODE model config from density_models/neuralODE/configs (out -> model_dir, npz -> train_data)."""
+    """Load Neural ODE model config from density_models/configs/neuralODE (out -> model_dir, npz -> train_data)."""
     try:
         import yaml
     except ImportError:
@@ -845,9 +845,9 @@ def main():
     parser.add_argument("--models", nargs="+", default=None,
                        help="Specific models to evaluate (default: all or from --from-training-configs)")
     parser.add_argument("--from-training-configs", action="store_true",
-                       help="Load model_dir and train_data from unconditional_training YAMLs (57.5, 78, 73)")
+                       help="Load model_dir and train_data from density_models/configs/diffusion training YAMLs (57.5, 78, 73)")
     parser.add_argument("--config-dir", type=str, default=None,
-                       help="Directory with unconditional_training YAMLs (default: <repo>/diffusion/configs/unconditional_training)")
+                       help="Directory with Diffusion training YAMLs (default: <repo>/density_models/configs/diffusion)")
     parser.add_argument("--distances", nargs="+", type=float, default=None,
                        help="OOD distances to test (default: per-environment distances)")
     parser.add_argument("--use-env-distances", action="store_true", default=True,
@@ -879,7 +879,7 @@ def main():
         if not config_dir:
             script_dir = os.path.dirname(os.path.abspath(__file__))
             repo_root = os.path.dirname(os.path.dirname(script_dir))
-            config_dir = os.path.join(repo_root, "density_models", "diffusion", "configs", "unconditional_training")
+            config_dir = os.path.join(repo_root, "density_models", "configs", "diffusion")
         models_to_eval = load_models_from_training_configs(config_dir)
         if args.models:
             models_to_eval = {k: v for k, v in models_to_eval.items() if k in args.models}
@@ -910,7 +910,7 @@ def main():
     if getattr(args, "density_types", ["diffusion"]) and "neuralode" in getattr(args, "density_types", []):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         repo_root = os.path.dirname(os.path.dirname(script_dir))
-        neuralode_config_dir = os.path.join(repo_root, "density_models", "neuralODE", "configs")
+        neuralode_config_dir = os.path.join(repo_root, "density_models", "configs", "neuralODE")
         neuralode_models = load_models_from_neuralode_configs(neuralode_config_dir)
 
     all_results = {

@@ -800,6 +800,14 @@ def parse_args() -> TrainConfig:
                         help="Action dimension (used with --compute-thresholds-only)")
 
     args = parser.parse_args()
+    # resolve repo-relative paths (data/..., checkpoints/...) independent of the working directory
+    import sys as _sys
+    _root = os.path.dirname(os.path.abspath(__file__))
+    while not os.path.isfile(os.path.join(_root, 'common', 'paths.py')) and os.path.dirname(_root) != _root:
+        _root = os.path.dirname(_root)
+    _sys.path.insert(0, _root)
+    from common.paths import resolve_args
+    resolve_args(args, ('npz', 'out'))
 
     # Print all parsed configs (arguments)
     print("Parsed configuration:")

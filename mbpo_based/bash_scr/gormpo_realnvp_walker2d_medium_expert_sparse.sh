@@ -23,7 +23,7 @@ for seed in "${seeds[@]}"; do
     # Step 1: Train RealNVP density estimator for this seed
     # echo "Step 1/2: Training RealNVP density estimator (seed $seed)..."
     # python ../density_models/realnvp_module/realnvp.py \
-    #     --config ../configs/realnvp/walker2d_medium_expert_sparse.yaml \
+    #     --config ../density_models/configs/realnvp/walker2d_medium_expert_sparse.yaml \
     #     --seed $seed \
     #     --model_save_path checkpoints/walker2d_medium_expert_sparse/realnvp_$seed/realnvp_$seed \
     #     --device cuda:5

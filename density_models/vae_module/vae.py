@@ -649,7 +649,7 @@ def parse_args():
     """Parse command line arguments."""
     print("Running", __file__)
     config_parser = argparse.ArgumentParser(add_help=False)
-    config_parser.add_argument("--config", type=str, default="configs/vae/hopper_medium_expert_sparse.yaml")
+    config_parser.add_argument("--config", type=str, default="density_models/configs/vae/hopper_medium_expert_sparse.yaml")
     config_args, remaining_argv = config_parser.parse_known_args()
     if config_args.config:
         with open(config_args.config, "r") as f:

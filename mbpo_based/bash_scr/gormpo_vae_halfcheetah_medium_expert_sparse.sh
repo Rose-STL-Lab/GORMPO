@@ -23,7 +23,7 @@ for seed in "${seeds[@]}"; do
     # Step 1: Train VAE density estimator for this seed
     # echo "Step 1/2: Training VAE density estimator (seed $seed)..."
     # python ../density_models/vae_module/vae.py \
-    #     --config ../configs/vae/halfcheetah_medium_expert_sparse.yaml \
+    #     --config ../density_models/configs/vae/halfcheetah_medium_expert_sparse.yaml \
     #     --seed $seed \
     #     --model_save_path checkpoints/halfcheetah_medium_expert_sparse/vae_$seed/vae_$seed \
     #     --device cuda:2 

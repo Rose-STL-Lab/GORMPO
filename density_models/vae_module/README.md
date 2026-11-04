@@ -52,7 +52,7 @@ pip install -r requirements.txt
 
 ```bash
 # Using YAML config
-python density_models/vae_module/vae.py --config configs/vae/hopper_medium_expert_sparse.yaml
+python density_models/vae_module/vae.py --config density_models/configs/vae/hopper_medium_expert_sparse.yaml
 
 # Using command-line arguments
 python density_models/vae_module/vae.py \
@@ -115,7 +115,7 @@ history = model.fit(
 
 ### YAML Configuration Files
 
-Configuration files are located in `configs/vae/`. Example structure:
+Configuration files are located in `density_models/configs/vae/`. Example structure:
 
 ```yaml
 # Task and data
@@ -216,7 +216,7 @@ The VAE can be used as a drop-in replacement for RealNVP in the GORMPO framework
 
 1. Train VAE on offline dataset:
    ```bash
-   python density_models/vae_module/vae.py --config configs/vae/hopper_medium_expert_sparse.yaml
+   python density_models/vae_module/vae.py --config density_models/configs/vae/hopper_medium_expert_sparse.yaml
    ```
 
 2. Use in MOPO training by modifying `transition_model.py` to use VAE scores instead of RealNVP log-probabilities.
@@ -323,7 +323,7 @@ density_models/vae_module/
 ├── example_usage.py      # Usage examples
 └── README.md             # This file
 
-configs/vae/
+density_models/configs/vae/
 ├── hopper.yaml           # Hopper-medium-v2 config
 ├── walker2d.yaml         # Walker2d-medium-v2 config
 └── halfcheetah.yaml      # HalfCheetah-medium-v2 config

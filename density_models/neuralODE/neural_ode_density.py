@@ -531,6 +531,14 @@ def parse_args() -> TrainConfig:
     parser.set_defaults(time_dependent=dget("time_dependent", True))
 
     args = parser.parse_args()
+    # resolve repo-relative paths (data/..., checkpoints/...) independent of the working directory
+    import sys as _sys
+    _root = os.path.dirname(os.path.abspath(__file__))
+    while not os.path.isfile(os.path.join(_root, 'common', 'paths.py')) and os.path.dirname(_root) != _root:
+        _root = os.path.dirname(_root)
+    _sys.path.insert(0, _root)
+    from common.paths import resolve_args
+    resolve_args(args, ('npz', 'out'))
 
     # Validate that either npz or task is provided
     if args.npz is None and args.task is None:

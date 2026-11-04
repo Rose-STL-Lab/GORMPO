@@ -23,7 +23,7 @@ for seed in "${seeds[@]}"; do
     # Step 1: Train KDE density estimator for this seed
     # echo "Step 1/2: Training KDE density estimator (seed $seed)..."
     # python ../density_models/kde_module/kde.py \
-    #     --config ../configs/kde/halfcheetah_medium_expert_sparse.yaml \
+    #     --config ../density_models/configs/kde/halfcheetah_medium_expert_sparse.yaml \
     #     --seed $seed \
     #     --save_path checkpoints/halfcheetah_medium_expert_sparse/kde_$seed/kde_$seed \
     #     --devid 0

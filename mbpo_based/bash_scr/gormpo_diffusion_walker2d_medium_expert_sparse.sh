@@ -27,7 +27,7 @@ for seed in "${seeds[@]}"; do
     # Step 1: Train Diffusion model for this seed
     # echo "Step 1/2: Training Diffusion model (seed $seed)..."
     # python ../density_models/diffusion/ddim_training_unconditional.py \
-    #     --config ../density_models/diffusion/configs/unconditional_training/walker2d_medium_expert_sparse.yaml \
+    #     --config ../density_models/configs/diffusion/walker2d_medium_expert_sparse.yaml \
     #     --seed $seed \
     #     --epochs 100 \
     #     --device cuda:5 \

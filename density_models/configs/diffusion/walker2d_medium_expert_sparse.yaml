@@ -1,0 +1,31 @@
+# Diffusion (DDPM) training configuration
+npz: data/diffusion_processed/walker2d_medium_expert_sparse_73_train.npz
+test_npz: data/diffusion_processed/walker2d_medium_expert_sparse_73_test.npz  # used by monte_carlo_sampling_unconditional.py
+out: checkpoints/walker2d_medium_expert_sparse/diffusion_42
+
+# training
+epochs: 100
+batch: 512
+lr: 0.0002
+wd: 0.0
+timesteps: 50000
+checkpoint_every_epochs: 10
+seed: 42
+device: cuda
+
+# model
+model: mlp
+hidden: 512
+time_emb: 128
+layers: 3
+dropout: 0.0
+
+# logging
+wandb: False
+wandb_project: GORMPO
+wandb_run: unconditional_ddim_mlp_walker2d_medium_expert_sparse_73
+log_every: 100
+samples_every: 1
+
+# Usage:
+# python density_models/diffusion/ddim_training_unconditional.py --config density_models/configs/diffusion/walker2d_medium_expert_sparse.yaml

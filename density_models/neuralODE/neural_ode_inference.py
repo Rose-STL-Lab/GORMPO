@@ -19,10 +19,9 @@ try:
 except Exception:
     yaml = None
 
-if __package__ is None or __package__ == "":
-    project_root = Path(__file__).resolve().parents[2]
-    if str(project_root) not in sys.path:
-        sys.path.append(str(project_root))
+project_root = Path(__file__).resolve().parents[2]
+if str(project_root) not in sys.path:
+    sys.path.append(str(project_root))
 
 from density_models.neuralODE.neural_ode_density import (
     ContinuousNormalizingFlow,
@@ -267,6 +266,9 @@ def parse_args() -> EvalConfig:
     parser.set_defaults(time_dependent=dget("time_dependent", True))
 
     args = parser.parse_args()
+    # resolve repo-relative paths (data/..., checkpoints/...) independent of the working directory
+    from common.paths import resolve_args
+    resolve_args(args, ('npz', 'model'))
     hidden_dims = tuple(args.hidden_dims) if isinstance(args.hidden_dims, list) else tuple([args.hidden_dims])
 
     return EvalConfig(

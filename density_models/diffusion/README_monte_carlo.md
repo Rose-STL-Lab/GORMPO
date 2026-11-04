@@ -16,7 +16,7 @@ This script performs Monte Carlo sampling using trained DDPM or DDIM models to e
 
 ```bash
 python density_models/diffusion/monte_carlo_sampling_unconditional.py \
-    --config density_models/diffusion/configs/test/hopper_mlp_ddpm_unconditional.yaml \
+    --config density_models/configs/diffusion/hopper_medium_expert_sparse.yaml \
     --model-dir /data/sparse_d4rl/pretrained/ddim_mlp_hopper_medium_v2 \
     --test-npz /public/sparse_d4rl/mapped/concat/hopper_one_step_test.npz \
     --output-dir ./monte_carlo_results/hopper_ddpm

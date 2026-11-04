@@ -51,11 +51,12 @@ python scripts/download_assets.py --envs hopper            # one environment
 python scripts/download_assets.py --what data density      # datasets + density models only
 ```
 
-Options: `--envs halfcheetah hopper walker2d`, `--models kde vae realnvp diffusion neuralODE`, `--what data ood density mbpo mobile`; `--intermediate` also fetches intermediate training checkpoints. Files keep the Hugging Face layout:
+Options: `--envs halfcheetah hopper walker2d`, `--models kde vae realnvp diffusion neuralODE`, `--what data ood npz density mbpo mobile`; `--intermediate` also fetches intermediate training checkpoints. Files keep the Hugging Face layout:
 
 ```
 data/sparse_datasets/<env>_medium_expert_sparse_<p>.pkl         sparse datasets (p = 72.5, 78, 73)
 data/ood_test/<env>-medium-expert-v2/ood-distance-<d>-uniform.pkl
+data/diffusion_processed/<env>_medium_expert_sparse_<p>_{train,val,test}.npz   Diffusion / Neural ODE training splits
 checkpoints/<env>_medium_expert_sparse/<model>_<seed>/            density models (kde, vae, realnvp, diffusion)
 checkpoints/<env>_medium_expert_sparse/neuralODE/                 Neural ODE density model
 checkpoints/<env>_medium_expert_sparse/mbpo_based/<model>/seed_<seed>_*/    MBPO-based GORMPO policy + dynamics_model/
@@ -71,7 +72,7 @@ Configs and scripts use these repo-relative paths (`data/...`, `checkpoints/...`
 | `density_models/` | Density estimators (KDE, VAE, RealNVP, Diffusion, Neural ODE) and their OOD tests  |
 | `scripts/density_penalty.py` | Density (OOD) reward penalty used by both base algorithms |
 | `common/`, `helpers/` | Buffers, loggers, evaluation and plotting utilities  |
-| `configs/` | Density-model training and OOD-test configs |
+| `density_models/configs/` | Density-model training and OOD-test configs (GORMPO policy configs are in `mbpo_based/configs/` and `mobile_based/config_gormpo/`) |
 | `mbpo_based/` | GORMPO on MBPO: `mopo.py`, `train.py`, `transition_model.py`, `algo/`, `models/`, `static_fns/`, `configs/`, `bash_scr/` |
 | `mobile_based/` | GORMPO on MOBILE: `train.py`, `dynamics/`, `policies/`, `models/`, `utils/`, `configs/`, `config_gormpo/`, `bash_scr/` |
 
@@ -111,23 +112,23 @@ Density-penalty settings come from `mobile_based/config_gormpo/<env>_medium_expe
 
 ## Training Density Models
 
-Train a density model on the sparse dataset before running GORMPO. Run from the repository root, with `<env>` one of `halfcheetah`, `hopper`, `walker2d`. Training configs are named `configs/<model>/<env>_medium_expert_sparse.yaml`:
+Train a density model on the sparse dataset before running GORMPO. Run from the repository root, with `<env>` one of `halfcheetah`, `hopper`, `walker2d`. Training configs are named `density_models/configs/<model>/<env>_medium_expert_sparse.yaml`:
 
 ```bash
 # KDE
-python density_models/kde_module/kde.py --config configs/kde/<env>_medium_expert_sparse.yaml
+python density_models/kde_module/kde.py --config density_models/configs/kde/<env>_medium_expert_sparse.yaml
 # VAE
-python density_models/vae_module/vae.py --config configs/vae/<env>_medium_expert_sparse.yaml
+python density_models/vae_module/vae.py --config density_models/configs/vae/<env>_medium_expert_sparse.yaml
 # RealNVP
-python density_models/realnvp_module/realnvp.py --config configs/realnvp/<env>_medium_expert_sparse.yaml
+python density_models/realnvp_module/realnvp.py --config density_models/configs/realnvp/<env>_medium_expert_sparse.yaml
 # Neural ODE
-python density_models/neuralODE/neural_ode_density.py --config configs/neuralODE/<env>_medium_expert_sparse.yaml
+python density_models/neuralODE/neural_ode_density.py --config density_models/configs/neuralODE/<env>_medium_expert_sparse.yaml
 # Diffusion
 python density_models/diffusion/ddim_training_unconditional.py \
-    --config density_models/diffusion/configs/unconditional_training/<env>_medium_expert_sparse.yaml
+    --config density_models/configs/diffusion/<env>_medium_expert_sparse.yaml
 ```
 
-Each config sets where the model is saved (`model_save_path`, or `out` for Neural ODE and Diffusion, under `checkpoints/<env>_medium_expert_sparse/`); use that path as `classifier_model_name` in the GORMPO configs. The downloaded models follow `checkpoints/<env>_medium_expert_sparse/<model>_<seed>/<model>_<seed>` (KDE, VAE, RealNVP), `.../diffusion_<seed>/checkpoint.pt` and `.../neuralODE`. The Diffusion and Neural ODE training configs read preprocessed `.npz` files that are not on Hugging Face. The MBPO multi-seed scripts contain these commands (commented out for quick policy training) for per-seed density models.
+Each config sets where the model is saved (`model_save_path`, or `out` for Neural ODE and Diffusion, under `checkpoints/<env>_medium_expert_sparse/`); use that path as `classifier_model_name` in the GORMPO configs. The downloaded models follow `checkpoints/<env>_medium_expert_sparse/<model>_<seed>/<model>_<seed>` (KDE, VAE, RealNVP), `.../diffusion_<seed>/checkpoint.pt` and `.../neuralODE`. The Diffusion and Neural ODE training configs read the preprocessed `data/diffusion_processed/*.npz` splits (`--what npz`). The MBPO multi-seed scripts contain these commands (commented out for quick policy training) for per-seed density models.
 
 ## OOD Testing
 
@@ -149,17 +150,8 @@ python density_models/test_kde_ood_levels.py \
 - `results.json`: Numerical results for all metrics
 
 
-The KDE, VAE and RealNVP scripts can also take their arguments from `configs/<model>/ood_test/<env>_medium_expert_sparse.yaml` via `--config`. For Diffusion and Neural ODE, `configs/<model>/ood_test/<env>_medium_expert_sparse_ood.yaml` configures the OOD threshold calibration in `density_models/diffusion/diffusion_ood.py` and `density_models/neuralODE/neural_ode_ood.py`.
+The KDE, VAE and RealNVP scripts can also take their arguments from `density_models/configs/<model>/ood_test/<env>_medium_expert_sparse.yaml` via `--config`. For Diffusion and Neural ODE, `density_models/configs/<model>/ood_test/<env>_medium_expert_sparse_ood.yaml` configures the OOD threshold calibration in `density_models/diffusion/diffusion_ood.py` and `density_models/neuralODE/neural_ode_ood.py`.
 
-## t-SNE Policy vs Dataset Plots
-
-Compare policy support against the offline dataset for HalfCheetah, Hopper and Walker2d:
-
-```bash
-bash notebooks/run_tsne_policy_vs_dataset_all.sh
-```
-
-Policies are listed in `notebooks/policy_paths_{hopper,halfcheetah,walker2d}.json`; plots are saved to `results/tsne_policy_vs_dataset_sparse/{task}/`. For a single environment, run `notebooks/tsne_policy_vs_dataset.py` (see `--help`).
 
 ## Citation
 

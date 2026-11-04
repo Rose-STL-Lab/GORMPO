@@ -86,11 +86,11 @@ You can use the `neural_ode_inference.py` script with config files:
 ```bash
 # Compute NLL on test data
 python density_models/neuralODE/neural_ode_inference.py \
-    --config density_models/neuralODE/configs/test/hopper.yaml
+    --config density_models/configs/neuralODE/hopper_medium_expert_sparse.yaml
 
 # For other environments
 python density_models/neuralODE/neural_ode_inference.py \
-    --config density_models/neuralODE/configs/test/halfcheetah.yaml
+    --config density_models/configs/neuralODE/halfcheetah_medium_expert_sparse.yaml
 ```
 
 ---
@@ -220,7 +220,7 @@ def load_from_config(config_path: str) -> Tuple[ContinuousNormalizingFlow, EvalC
 
 
 # Usage
-flow, cfg = load_from_config('density_models/neuralODE/configs/test/hopper.yaml')
+flow, cfg = load_from_config('density_models/configs/neuralODE/hopper_medium_expert_sparse.yaml')
 ```
 
 ---
@@ -553,7 +553,7 @@ if __name__ == '__main__':
 ```bash
 # Compute NLL on test data using config file
 python density_models/neuralODE/neural_ode_inference.py \
-    --config density_models/neuralODE/configs/test/hopper.yaml
+    --config density_models/configs/neuralODE/hopper_medium_expert_sparse.yaml
 
 # The script will output:
 # - Mean NLL and per-sample statistics
@@ -660,7 +660,7 @@ if __name__ == '__main__':
 
 ## Configuration Files
 
-Example configs are available in `density_models/neuralODE/configs/`:
+Example configs are available in `density_models/configs/neuralODE/`:
 
 **Training configs:**
 - `hopper_mlp.yaml`
@@ -711,11 +711,11 @@ seed: 0
 ```bash
 # Inference on test data
 python density_models/neuralODE/neural_ode_inference.py \
-    --config density_models/neuralODE/configs/test/hopper.yaml
+    --config density_models/configs/neuralODE/hopper_medium_expert_sparse.yaml
 
 # Override specific parameters
 python density_models/neuralODE/neural_ode_inference.py \
-    --config density_models/neuralODE/configs/test/halfcheetah.yaml \
+    --config density_models/configs/neuralODE/halfcheetah_medium_expert_sparse.yaml \
     --max-samples 500 \
     --device cpu
 ```

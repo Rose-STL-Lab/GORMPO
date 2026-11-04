@@ -587,7 +587,7 @@ def find_optimal_percentile(
 def main():
     print("Running", __file__)
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="configs/kde/walker2d_medium_expert_sparse.yaml")
+    parser.add_argument("--config", type=str, default="density_models/configs/kde/walker2d_medium_expert_sparse.yaml")
     args, remaining_argv = parser.parse_known_args()
 
     if args.config:
